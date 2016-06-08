@@ -4,10 +4,10 @@
 
 
 ## methods
-  - get
-  - post
-  - put/patch
-  - delete
+  - get (url)
+  - post (url, body)
+  - put/patch (url, body)
+  - delete (url)
 
 ## examples
     var ChimpWrapper = require('chimp-wrapper');
