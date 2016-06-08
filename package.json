@@ -1,0 +1,21 @@
+{
+  "name": "chimp-wrapper",
+  "version": "0.0.1",
+  "repository": "https://github.com/Kirkhammetz/chimp-wrapper.git",
+  "description": "Simple Promise based wrapper for MailChimp API v3",
+  "main": "index.js",
+  "dependencies": {},
+  "keywords": [
+    "mailchimp",
+    "api",
+    "v3",
+    "node",
+    "promise"
+  ],
+  "author": "Simone Corsi <simonecorsi.rm@gmail.com> (http://www.simonecorsi.me)",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.12.0"
+  },
+  "devDependencies": {}
+}
