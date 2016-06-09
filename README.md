@@ -3,55 +3,39 @@
 
     npm install --save chimp-wrapper
 
-
 ## plain calls methods
-  var ChimpWrapper = require('chimp-wrapper');
-  const MC = new ChimpWrapper(yourApiKeyString);
-
-  MC.get (url);
-  MC.post (url, body);
-  MC.put/patch (url, body);
-  MC.delete (url);
+    var ChimpWrapper = require('chimp-wrapper');
+    const MC = new ChimpWrapper(yourApiKeyString);
+    MC.get (url);
+    MC.post (url, body);
+    MC.put/patch (url, body);
+    MC.delete (url);
 
 ## Builder Methods
 #### Lists
+
 return all lists
-  MC.lists()
+
+    MC.lists()
 
 return single list
-  MC.lists("id")
+
+    MC.lists("id")
 
 create a list
-  MC.listsCreate([object]) // where object contains required property
+
+    MC.listsCreate([object]) // where object contains required property
 
 edit single list
-  MC.listsEdit("id", [object]) // where object contains property to edit
+
+    MC.listsEdit("id", [object]) // where object contains property to edit
 
 delete single list
-  MC.listsDelete("id")
 
-## examples
-
-    //  Get lists
-    MC.get('/lists')
-      .then( (res) => {
-        console.log(res);
-      })
-      .catch( (err) => {
-        console.log(err)
-      })
-
-    //  Delete list
-    MC.delete('/lists/{LIST_ID}')
-      .then( (res) => {
-        console.log(res);
-      })
-      .catch( (err) => {
-        console.log(err)
-      })
+    MC.listsDelete("id")
 
 ## Tests
 before testing rename .env-sample.json to .env.json and edit the API_KEY inside to match the one for you testing account.
 all the created element gets deleted after tests.
 
-  npm test
+    npm test
