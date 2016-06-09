@@ -30,3 +30,6 @@
       .catch( (err) => {
         console.log(err)
       })
+
+## Tests
+  npm test
