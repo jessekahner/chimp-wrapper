@@ -1,11 +1,11 @@
 var expect = require('expect');
 var ChimpWrapper = require('../index');
 
+require('dot-env')
+const MC = new ChimpWrapper( process.env.API_KEY );
+
+
 describe('Creating Istance', () => {
-  var apiKey = "b935432cb953f72f4e9c3c5ae76537fd-us12";
-  const MC = new ChimpWrapper(apiKey);
-
-
   it('should generate right api URL from apiKey', () => {
     expect(MC.__apiUrl).toBeA('string');
     expect(MC.__apiUrl).toBe('https://us12.api.mailchimp.com/3.0/');
@@ -18,7 +18,7 @@ describe('Creating Istance', () => {
     expect(MC.http.defaults.headers).toExist();
     expect(MC.http.defaults.headers.Authorization).toExist();
     expect(MC.http.defaults.headers.Authorization).toBeA('string');
-    expect(MC.http.defaults.headers.Authorization).toEqual('apiKey ' + apiKey);
+    expect(MC.http.defaults.headers.Authorization).toEqual('apiKey ' + process.env.API_KEY);
   });
 
   describe('proto helper methods', () => {

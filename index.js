@@ -47,22 +47,41 @@ ChimpWrapper.prototype.put = function(url, body) {
 
 ChimpWrapper.prototype.delete = function(url) {
   url = this.parseUrl(url);
-  return this.http.delete(url).then((res) => {
-    return res.data;
-  });
+  return this.http.delete(url);
 }
 
 // LISTS
-ChimpWrapper.prototype.lists = function() {
-  return this.http.get('/lists').then((res) => {
-    return res.data;
-  });
+ChimpWrapper.prototype.lists = function(id) {
+  if(!id){
+    return this.http.get('/lists').then((res) => {
+      return res.data;
+    });
+  } else {
+    return this.http.get('/lists/' + id).then((res) => {
+      return res.data;
+    });
+  }
 }
-ChimpWrapper.prototype.list = function(id) {
-  return this.http.get('/lists/' + id).then((res) => {
-    return res.data;
-  });
+
+ChimpWrapper.prototype.listsCreate = function(body){
+  // CHECKS
+  if(body){
+    return this.post('lists', body);
+  }else{
+    throw new Error('Body missing');
+  }
 }
+
+ChimpWrapper.prototype.listsEdit = function(id, body){
+   if(!id) throw new Error('No list ID provided!');
+   return this.patch('lists/' + id, body);
+}
+
+ChimpWrapper.prototype.listsDelete = function(id){
+   if(!id) throw new Error('No list ID provided!');
+   return this.delete('lists/' + id);
+}
+
 
 
 module.exports = exports = ChimpWrapper;
