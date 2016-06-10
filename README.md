@@ -7,7 +7,8 @@
 
 ## Basic methods calls
 
-**Insert API path only without protocol/domainname, the full url will be geneted from you API key**
+**Insert API path only without protocol/domainname, the full url will be geneted from you API key (EG: /lists)**
+_you can use relative or absolute path it will be generated as a absolute anyway_
 
     var ChimpWrapper = require('chimp-wrapper');
     const CW = new ChimpWrapper(yourApiKeyString);
