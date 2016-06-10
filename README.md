@@ -34,29 +34,33 @@ delete single list
 
     CW.listsDelete([id|string])
 
-get lists activity
+get list's activity
 
     CW.listsActivity([list_id|string])
 
-get lists clients
+get list's clients
 
     CW.listsClients([list_id|string])
 
-get abuse-reports
+get list's abuse-reports
 passing only the lists id return all reports.
 
     CW.listsAbuseReports([list_id|string], [single_report_id|string|optional|null])
 
-get list grow history
+get list's grow history
 passing only the lists id return all months.
     CW.listsGrowthHistory[list_id|string], [month|format: "2016-05"])
 
-CRUD list Categories
+CRUD list's Categories
     // options: { action: [create|edit|delete], body[object], category_id[string] }
     CW.listsCategories([list_id|string], [options|object])
 
-CRUD list Categories > Interests
+CRUD list's Categories > Interests
     // options: { action: [create|edit|delete], body[object], category_id[string], interest_id[string] }
+    CW.listsInterests([list_id|string], [options|object])
+
+CRUD list's member
+    // options: { action: [create|edit|delete], body[object], single_member_id[string], interest_id[string] }
     CW.listsInterests([list_id|string], [options|object])
 
 

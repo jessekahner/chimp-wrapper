@@ -4,6 +4,10 @@ var ChimpWrapper = require('../index');
 require('dot-env')
 const MC = new ChimpWrapper( process.env.API_KEY );
 
+function ResError(errors){
+  return new Error(JSON.stringify(errors.data));
+}
+
 describe('Methods', () => {
 
   describe('GET method', () => {
@@ -11,9 +15,7 @@ describe('Methods', () => {
       MC.get('lists').then((res) => {
         expect(res).toExist();
         done();
-      }).catch((e) => {
-        done(e);
-      })
+      }).catch( err => done( ResError( err ) ) );
     });
     /// ...
   });

@@ -122,10 +122,19 @@ module.exports = function (ChimpWrapper) {
       throw new Error('No list ID provided!');
       return;
     }
-    if(!options) return this.get('/lists' + id + "/members");
+
+    if(!options) return this.get('/lists/' + id + '/members');
+
+    if(options && !options.action && options.single_member_id) return this.get('/lists/' + id + '/members/' + options.single_member_id);
 
     if(options && options.action === 'create'){
-      return this.post('/lists/' + id + "/members", options.body );
+      return this.post('/lists/' + id + '/members', options.body );
+    }
+    if( options && options.action === 'edit' ){
+      return this.patch('/lists/' + id + '/members/' + options.single_member_id, options.body );
+    }
+    if( options && options.action === 'delete' ){
+      return this.delete('/lists/' + id + '/members/' + options.single_member_id);
     }
   }
 
