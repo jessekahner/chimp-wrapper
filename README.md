@@ -49,18 +49,22 @@ passing only the lists id return all reports.
 
 get list's grow history
 passing only the lists id return all months.
+
     CW.listsGrowthHistory[list_id|string], [month|format: "2016-05"])
 
 CRUD list's Categories
     // options: { action: [create|edit|delete], body[object], category_id[string] }
+
     CW.listsCategories([list_id|string], [options|object])
 
 CRUD list's Categories > Interests
     // options: { action: [create|edit|delete], body[object], category_id[string], interest_id[string] }
+
     CW.listsInterests([list_id|string], [options|object])
 
 CRUD list's member
     // options: { action: [create|edit|delete], body[object], single_member_id[string], interest_id[string] }
+
     CW.listsInterests([list_id|string], [options|object])
 
 
