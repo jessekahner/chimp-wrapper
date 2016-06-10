@@ -48,6 +48,7 @@ describe('List builder', function() {
     }).catch( err => done( ResError( err ) ) );
   });
 
+  //  CREATE LIST
   describe('create list', () => {
 
     it('should throw error if wrong option provided', () => {
@@ -64,6 +65,7 @@ describe('List builder', function() {
 
   });
 
+  //  EDIT LIST
   describe('edit list', () => {
 
     it('should throw error if no id given', () => {
@@ -82,6 +84,7 @@ describe('List builder', function() {
 
   });
 
+  //  ACTIVITY
   describe('get lists activity', () => {
 
     it('shoud throw err if no ID given', () => {
@@ -97,6 +100,7 @@ describe('List builder', function() {
 
   });
 
+  //  CLIENTS
   describe('get lists clients', () => {
 
     it('shoud throw err if no ID given', () => {
@@ -112,6 +116,7 @@ describe('List builder', function() {
 
   }); //describe
 
+  //  ABUSE REPORTS
   describe('get lists abuse-report', () => {
 
     it('shoud throw err if no ID given', () => {
@@ -127,6 +132,8 @@ describe('List builder', function() {
 
   }); //describe
 
+
+  //  CATEGORIES aka groups' titles
   describe('lists INTERESTS\' categories', () => {
 
     it('shoud throw err if no ID given', () => {
@@ -175,6 +182,8 @@ describe('List builder', function() {
     });
   });
 
+
+  //  INTERESTS aka groups' names
   describe('lists CATEGORY\'s interests', () => {
     var inner_interest_id;
 
@@ -238,6 +247,7 @@ describe('List builder', function() {
     });
   }); //describe;
 
+  //  GROWTH HISTORY
   describe('get lists growth-history', () => {
 
     it('shoud throw err if no ID given', () => {
@@ -334,8 +344,66 @@ describe('List builder', function() {
         done();
       }).catch( err => done( ResError( err ) ));
     });
+  });
+
+
+  //  SEGMENTS
+  describe('Segments', () => {
+    var segment_id;
+    it('should throw error if no id given', () => {
+      expect(MC.listsSegments).toThrow(/No list ID provided/);
+    });
+
+    it('shoud return segments lists', (done) => {
+      MC.listsSegments(dummyListId).then((res) => {
+        expect(res).toExist()
+        expect(res.segments).toBeA('array')
+        done();
+      }).catch( err => done( ResError( err ) ));
+    });
+
+    it('shoud create a segment', (done) => {
+      MC.listsSegments(dummyListId, {
+        action: 'create',
+        body: {
+          name: 'segment',
+          static_segment: []
+        }
+      }).then((res) => {
+        expect(res).toExist()
+        expect(res.name).toBe('segment');
+        segment_id = res.id;
+        done();
+      }).catch( err => done( ResError( err ) ));
+    });
+
+    it('shoud edit single segment', (done) => {
+      MC.listsSegments(dummyListId, {
+        action: 'edit',
+        segment_id: segment_id,
+        body: {
+          name: 'segment_edit'
+        }
+      }).then((res) => {
+        expect(res).toExist();
+        expect(res.name).toEqual('segment_edit');
+        done();
+      }).catch( err => done( ResError( err ) ));
+    });
+
+    it('shoud delete segment', (done) => {
+      MC.listsSegments(dummyListId, {
+        action: 'delete',
+        segment_id: segment_id
+      }).then((res) => {
+        expect(res).toExist();
+        expect(res.status).toBe(204);
+        done();
+      }).catch( err => done( ResError( err ) ));
+    });
 
   });
+
 
   // KEEP IT LAST TO CLEANUP
   describe('delete lists', () => {

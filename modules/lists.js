@@ -62,46 +62,6 @@ module.exports = function (ChimpWrapper) {
      return this.get('lists/' + id + '/clients');
   }
 
-  ChimpWrapper.prototype.listsCategories = function(id, options){
-    // options: { action: [create|edit|delete], body[object], category_id[string] }
-     if(!id) {
-       throw new Error('No list ID provided!');
-       return;
-     }
-     if(!options) return this.get('lists/' + id + '/interest-categories');
-
-     if(options && options.action === 'create' && options.body){
-       return this.post('lists/' + id + '/interest-categories', options.body);
-     }
-     if(options && options.action === 'edit' && options.body && options.category_id){
-       return this.patch('lists/' + id + '/interest-categories/' + options.category_id, options.body);
-     }
-     if(options && options.action === 'delete' && options.category_id) {
-       return this.delete('lists/' + id + '/interest-categories/' + options.category_id);
-     }
-  }
-
-  ChimpWrapper.prototype.listsInterests = function(id, options){
-    // options: { action: [create|edit|delete], body[object], category_id[string] }
-    if(!id) {
-      throw new Error('No category_id or list id provided');
-      return;
-    } else if(options && !options.action){
-      throw new Error('No action property provided for listInterest options');
-      return;
-    }
-    switch (options.action) {
-      case 'create':
-        return this.post('lists/' + id + '/interest-categories/' + options.category_id + '/interests', options.body);
-        break;
-      case 'edit':
-        return this.patch('lists/' + id + '/interest-categories/' + options.category_id + '/interests/' + options.interest_id, options.body);
-        break;
-      case 'delete':
-        return this.delete('lists/' + id + '/interest-categories/' + options.category_id + '/interests/' + options.interest_id, options.body);
-        break;
-    }
-  }
 
 
   ChimpWrapper.prototype.listsGrowthHistory = function(id, month){
@@ -115,6 +75,47 @@ module.exports = function (ChimpWrapper) {
      }else {
        return this.get('lists/' + id + '/growth-history/' + month);
      }
+  }
+
+  ChimpWrapper.prototype.listsCategories = function(id, options){
+    // options: { action: [create|edit|delete], body[object], category_id[string] }
+    if(!id) {
+      throw new Error('No list ID provided!');
+      return;
+    }
+    if(!options) return this.get('lists/' + id + '/interest-categories');
+
+    if(options && options.action === 'create' && options.body){
+      return this.post('lists/' + id + '/interest-categories', options.body);
+    }
+    if(options && options.action === 'edit' && options.body && options.category_id){
+      return this.patch('lists/' + id + '/interest-categories/' + options.category_id, options.body);
+    }
+    if(options && options.action === 'delete' && options.category_id) {
+      return this.delete('lists/' + id + '/interest-categories/' + options.category_id);
+    }
+  }
+
+  ChimpWrapper.prototype.listsInterests = function(id, options){
+    // options: { action: [create|edit|delete], body[object], category_id[string] }
+    if(!id) {
+      throw new Error('No category_id or list id provided');
+      return;
+    } else if(options && !options.action){
+      throw new Error('No action property provided for listInterest options');
+      return;
+    }
+    switch (options.action) {
+      case 'create':
+      return this.post('lists/' + id + '/interest-categories/' + options.category_id + '/interests', options.body);
+      break;
+      case 'edit':
+      return this.patch('lists/' + id + '/interest-categories/' + options.category_id + '/interests/' + options.interest_id, options.body);
+      break;
+      case 'delete':
+      return this.delete('lists/' + id + '/interest-categories/' + options.category_id + '/interests/' + options.interest_id, options.body);
+      break;
+    }
   }
 
   ChimpWrapper.prototype.listsMembers = function (id, options) {
@@ -136,6 +137,28 @@ module.exports = function (ChimpWrapper) {
     if( options && options.action === 'delete' ){
       return this.delete('/lists/' + id + '/members/' + options.single_member_id);
     }
+  }
+
+  ChimpWrapper.prototype.listsSegments = function (id, options) {
+    if(!id) {
+      throw new Error('No list ID provided!');
+      return;
+    }
+
+    if(!options) return this.get('/lists/' + id + '/segments');
+
+    if(options && !options.action && options.segment_id) return this.get('/lists/' + id + '/segments/' + options.segment_id);
+
+    if(options && options.action === 'create'){
+      return this.post('/lists/' + id + '/segments', options.body );
+    }
+    if( options && options.action === 'edit' ){
+      return this.patch('/lists/' + id + '/segments/' + options.segment_id, options.body );
+    }
+    if( options && options.action === 'delete' ){
+      return this.delete('/lists/' + id + '/segments/' + options.segment_id);
+    }
+
   }
 
   return ChimpWrapper;
