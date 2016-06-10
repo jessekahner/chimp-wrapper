@@ -5,34 +5,61 @@
 
 ## plain calls methods
     var ChimpWrapper = require('chimp-wrapper');
-    const MC = new ChimpWrapper(yourApiKeyString);
-    MC.get (url);
-    MC.post (url, body);
-    MC.put/patch (url, body);
-    MC.delete (url);
+    const CW = new ChimpWrapper(yourApiKeyString);
+    CW.get (url);
+    CW.post (url, body);
+    CW.put/patch (url, body);
+    CW.delete (url);
 
 ## Builder Methods
 #### Lists
 
 return all lists
 
-    MC.lists()
+    CW.lists()
 
 return single list
 
-    MC.lists("id")
+    CW.lists([id|string])
 
 create a list
 
-    MC.listsCreate([object]) // where object contains required property
+    CW.listsCreate([options|object]) // where object contains required property
 
 edit single list
 
-    MC.listsEdit("id", [object]) // where object contains property to edit
+    CW.listsEdit("id", [options|object]) // where object contains property to edit
 
 delete single list
 
-    MC.listsDelete("id")
+    CW.listsDelete([id|string])
+
+get lists activity
+
+    CW.listsActivity([list_id|string])
+
+get lists clients
+
+    CW.listsClients([list_id|string])
+
+get abuse-reports
+passing only the lists id return all reports.
+
+    CW.listsAbuseReports([list_id|string], [single_report_id|string|optional|null])
+
+get list grow history
+passing only the lists id return all months.
+    CW.listsGrowthHistory[list_id|string], [month|format: "2016-05"])
+
+CRUD list Categories
+    // options: { action: [create|edit|delete], body[object], category_id[string] }
+    CW.listsCategories([list_id|string], [options|object])
+
+CRUD list Categories > Interests
+    // options: { action: [create|edit|delete], body[object], category_id[string], interest_id[string] }
+    CW.listsInterests([list_id|string], [options|object])
+
+
 
 ## Tests
 before testing rename .env-sample.json to .env.json and edit the API_KEY inside to match the one for you testing account.
