@@ -1,7 +1,7 @@
 var expect = require('expect');
 var ChimpWrapper = require('../index');
 require('dot-env')
-const MC = new ChimpWrapper( process.env.API_KEY );
+const CW = new ChimpWrapper( process.env.API_KEY );
 
 function ResError(errors){
   console.log(errors);
@@ -32,15 +32,15 @@ describe('List builder', function() {
   }
 
   it('should return all lists', (done) => {
-    expect(MC.lists).toExist();
-    MC.lists().then((res) => {
+    expect(CW.lists).toExist();
+    CW.lists().then((res) => {
       expect(res).toExist();
       done();
     }).catch( err => done( ResError( err ) ) );
   });
 
   it('should return single lists', (done) => {
-    MC.lists(dummyListId).then((res) => {
+    CW.lists(dummyListId).then((res) => {
       expect(res).toExist();
       expect(res).toBeA('object');
       expect(res.id).toEqual(dummyListId);
@@ -52,210 +52,97 @@ describe('List builder', function() {
   describe('create list', () => {
 
     it('should throw error if wrong option provided', () => {
-      expect(MC.listsCreate).toThrow(/missing/)
+      expect(CW.lists.create).toThrow(/missing/)
     });
 
     it('should create a list', (done) => {
-      MC.listsCreate(sampleList).then((res) => {
+      CW.lists.create(sampleList).then((res) => {
         dummyListId = res.id;
         expect(res.name).toEqual(sampleList.name);
         done();
       }).catch( err => done( ResError( err ) ) );
     });
 
-  });
+  }); //  CREATE LIST
 
   //  EDIT LIST
   describe('edit list', () => {
 
     it('should throw error if no id given', () => {
-      expect(MC.listsEdit).toThrow(/No list ID provided/)
+      expect(CW.lists.edit).toThrow(/No list ID provided/)
     });
 
     it('should edit the dummy list', (done) => {
-      var edit = {
+      var body = {
         name: 'nameChangeEditTest'
       }
-      MC.listsEdit(dummyListId, edit).then((res) => {
-        expect(res.name).toEqual(edit.name)
+      CW.lists.edit(dummyListId, body).then((res) => {
+        expect(res.name).toEqual(body.name)
         done();
       }).catch( err => done( ResError( err ) ) );
     });
 
-  });
+  });//  EDIT LIST
+
 
   //  ACTIVITY
   describe('get lists activity', () => {
 
     it('shoud throw err if no ID given', () => {
-      expect(MC.listsActivity).toThrow(/No list ID/);
+      expect(CW.lists.activity).toThrow(/No list ID/);
     });
 
     it('should return list activity', (done) => {
-      MC.listsActivity(dummyListId).then((res) => {
+      CW.lists.activity(dummyListId).then((res) => {
         expect(res).toExist();
         done();
       }).catch( err => done( ResError( err ) ) );
     });
 
-  });
+  }); // ACTIVITY
 
   //  CLIENTS
   describe('get lists clients', () => {
 
     it('shoud throw err if no ID given', () => {
-      expect(MC.listsClients).toThrow(/No list ID/);
+      expect(CW.lists.clients).toThrow(/No list ID/);
     });
 
     it('should return list clients', (done) => {
-      MC.listsClients(dummyListId).then((res) => {
+      CW.lists.clients(dummyListId).then((res) => {
         expect(res).toExist();
         done();
       }).catch( err => done( ResError( err ) ) );
     });
 
-  }); //describe
+  }); //  CLIENTS
+
 
   //  ABUSE REPORTS
   describe('get lists abuse-report', () => {
 
     it('shoud throw err if no ID given', () => {
-      expect(MC.listsAbuseReports).toThrow(/No list ID/);
+      expect(CW.lists.abuseReports).toThrow(/No list ID/);
     });
 
     it('should return list abuse-report', (done) => {
-      MC.listsAbuseReports(dummyListId).then((res) => {
+      CW.lists.abuseReports(dummyListId).then((res) => {
         expect(res).toExist();
         done();
       }).catch( err => done( ResError( err ) ) );
     });
 
-  }); //describe
-
-
-  //  CATEGORIES aka groups' titles
-  describe('lists INTERESTS\' categories', () => {
-
-    it('shoud throw err if no ID given', () => {
-      expect(MC.listsCategories).toThrow(/No list ID/);
-    });
-
-    it('should return list interest-categories', (done) => {
-      MC.listsCategories(dummyListId).then((res) => {
-
-        expect(res.categories).toExist();
-        expect(res.categories).toBeA('array');
-        done();
-      }).catch( err => done( ResError( err ) ) );
-    });
-
-    it('shoud create interest category in the list', (done) => {
-      MC.listsCategories(dummyListId, {
-        action: 'create',
-        body: {
-          title: 'TestValue',
-          type: 'radio'
-        }
-      }).then((res) => {
-        created_category_id = res.id;
-        expect(res).toExist();
-        done();
-      }).catch( err => done( ResError( err ) ) );
-    });
-
-    it('shoud edit created category', (done) => {
-      MC.listsCategories(dummyListId, {
-        action: 'edit',
-        category_id: created_category_id,
-        body: { title: 'Programming'}
-      }).then((res) => {
-        expect(res.title).toEqual('Programming');
-        done()
-      }).catch((err) => done(err));
-    });
-
-    it('shoud list categories', (done) => {
-      MC.listsCategories(dummyListId).then((res) => {
-        expect(res).toExist();
-        done();
-      }).catch((err) => done(err));
-    });
-  });
-
-
-  //  INTERESTS aka groups' names
-  describe('lists CATEGORY\'s interests', () => {
-    var inner_interest_id;
-
-    it('shoud throw err if no list ID given', () => {
-      expect(MC.listsInterests).toThrow(/No category_id or list id provided/);
-    });
-
-    it('shoud create an interest inside a category', (done) => {
-      MC.listsInterests(dummyListId, {
-        action: 'create',
-        category_id: created_category_id,
-        body: {
-          name: 'python',
-        }
-      }).then((res) => {
-        inner_interest_id = res.id;
-        expect(res).toExist();
-        expect(res.name).toEqual('python');
-        done();
-      }).catch( err => done( ResError( err ) ) );
-    });
-
-    it('shoud edit an interest inside a category', (done) => {
-      MC.listsInterests(dummyListId, {
-        action: 'edit',
-        interest_id: inner_interest_id,
-        category_id: created_category_id,
-        body: {
-          name: 'javascript',
-        }
-      }).then((res) => {
-        expect(res).toExist();
-        expect(res.name).toEqual('javascript');
-        done();
-      }).catch( err => done( ResError( err ) ) );
-    });
-
-    it('shoud delete interes', (done) => {
-      MC.listsInterests(dummyListId, {
-        action: 'delete',
-        category_id: created_category_id,
-        interest_id: inner_interest_id,
-      }).then((res) => {
-        expect(res).toExist();
-        expect(res.status).toEqual(204);
-        expect(res.statusText).toBe('No Content');
-        done();
-      }).catch( err => done( ResError( err ) ) );
-    });
-
-    it('shoud delete created category', (done) => {
-      MC.listsCategories(dummyListId, {
-        action: 'delete',
-        category_id: created_category_id
-      }).then((res) => {
-        expect(res).toExist();
-        expect(res.status).toEqual(204);
-        expect(res.statusText).toBe('No Content');
-        done()
-      }).catch( err => done( ResError( err ) ) );
-    });
-  }); //describe;
+  });  //  ABUSE REPORTS
 
   //  GROWTH HISTORY
   describe('get lists growth-history', () => {
 
     it('shoud throw err if no ID given', () => {
-      expect(MC.listsGrowthHistory).toThrow(/No list ID/);
+      expect(CW.lists.growthHistory).toThrow(/No list ID/);
     });
 
     it('should return list growth-history', (done) => {
-      MC.listsGrowthHistory(dummyListId).then((res) => {
+      CW.lists.growthHistory(dummyListId).then((res) => {
         expect(res).toExist();
         done();
       });
@@ -266,7 +153,7 @@ describe('List builder', function() {
       var month = new Date().getMonth().toString().length < 1 ? new Date().getMonth() + 1 : '0' + new Date().getMonth() + 1;
       var year = new Date().getFullYear();
       date = year + "-" + month;
-      MC.listsGrowthHistory(dummyListId, String(date)).then((res) => {
+      CW.lists.growthHistory(dummyListId, String(date)).then((res) => {
         expect(res).toExist();
         done();
       }).catch((err) => {
@@ -278,21 +165,147 @@ describe('List builder', function() {
 
   });
 
-  // MEMBERS
-  describe('lists members', () => {
 
-    it('should throw error if no id given', () => {
-      expect(MC.listsMembers).toThrow(/No list ID provided/);
+  //  CATEGORIES aka groups' titles
+  describe('lists INTERESTS\' categories', () => {
+
+    it('shoud throw err if no ID given', () => {
+      expect(CW.lists.categories).toThrow(/(ID|body)/);
+      expect(CW.lists.categories.create).toThrow(/(ID|body|category)/);
+      expect(CW.lists.categories.edit).toThrow(/(ID|body|category)/);
+      expect(CW.lists.categories.delete).toThrow(/(ID|body|category)/);
+    });
+
+    it('should return list interest-categories', (done) => {
+      CW.lists.categories(dummyListId).then((res) => {
+        expect(res.categories).toExist();
+        expect(res.categories).toBeA('array');
+        done();
+      }).catch( err => done( ResError( err ) ) );
+    });
+
+    it('shoud create interest category in the list', (done) => {
+      // no arguments check
+      expect(CW.lists.categories.create).toThrow(/(ID|body)/);
+
+      CW.lists.categories.create(dummyListId, {
+          title: 'TestValue',
+          type: 'radio'
+      }).then((res) => {
+        created_category_id = res.id;
+        expect(res).toExist();
+        done();
+      }).catch( err => done( ResError( err ) ) );
+    });
+
+    it('shoud edit created category', (done) => {
+
+      // no arguments check
+      expect(CW.lists.categories.edit).toThrow(/(ID|body)/);
+
+      CW.lists.categories.edit(dummyListId, created_category_id, {
+        title: 'Programming'
+      }).then((res) => {
+        expect(res.title).toEqual('Programming');
+        done()
+      }).catch((err) => done(err));
+    });
+
+    it('shoud list 1 categories after creation ', (done) => {
+      CW.lists.categories(dummyListId, created_category_id).then((res) => {
+        expect(res).toExist();
+        expect(res.id).toEqual(created_category_id);
+        done();
+      }).catch((err) => done(err));
+    });
+  });
+
+
+  //  INTERESTS aka groups' names
+  describe('lists CATEGORY\'s interests', () => {
+    var created_interest_id;
+
+    it('shoud throw err if no ID given', () => {
+      expect(CW.lists.interests).toThrow(/(ID|body)/);
+      expect(CW.lists.interests.create).toThrow(/(ID|body|category)/);
+      expect(CW.lists.interests.edit).toThrow(/(ID|body|category)/);
+      expect(CW.lists.interests.delete).toThrow(/(ID|body|category)/);
+    });
+
+    it('shoud create an interest inside a category', (done) => {
+      CW.lists.interests.create(dummyListId, created_category_id, {
+        name: 'python',
+      }).then((res) => {
+        created_interest_id = res.id;
+        expect(res).toExist();
+        expect(res.name).toEqual('python');
+        done();
+      }).catch( err => done( ResError( err ) ) );
+    });
+
+    it('shoud edit an interest inside a category', (done) => {
+      CW.lists.interests.edit(dummyListId, created_category_id, created_interest_id, {
+        name: 'javascript',
+      }).then((res) => {
+        expect(res).toExist();
+        expect(res.name).toEqual('javascript');
+        done();
+      }).catch( err => done( ResError( err ) ) );
+    });
+
+    it('shoud lists all intests in a category', () => {
+      CW.lists.interests(dummyListId, created_category_id ).then((res) => {
+        expect(res).toExist();
+        expect(res.length).toNotBe(0)
+        done()
+      }).catch( err => done( ResError( err ) ) );
+    });
+
+    it('shoud return a single interest', () => {
+      CW.lists.interests(dummyListId, created_category_id, created_interest_id ).then((res) => {
+        expect(res).toExist();
+        expect(res.id).toEqual(created_interest_id);
+        done()
+      }).catch( err => done( ResError( err ) ) );
+    });
+
+    it('shoud delete interest', (done) => {
+      CW.lists.interests.delete(dummyListId, created_category_id, created_interest_id ).then((res) => {
+        expect(res).toExist();
+        expect(res.status).toEqual(204);
+        expect(res.statusText).toBe('No Content');
+        done();
+      }).catch( err => done( ResError( err ) ) );
+    });
+
+    it('shoud delete created category', (done) => {
+      CW.lists.categories.delete(dummyListId, created_category_id ).then((res) => {
+        expect(res).toExist();
+        expect(res.status).toEqual(204);
+        expect(res.statusText).toBe('No Content');
+        done();
+      }).catch( err => done( ResError( err ) ) );
+    });
+
+  }); //describe;
+
+  //  MEMBERS
+  // --------------------------------------------------------------------------------
+
+  describe('lists members', () => {
+    var created_member_id;
+
+    it('shoud throw err if no ID given', () => {
+      expect(CW.lists.members).toThrow(/(ID|body)/);
+      expect(CW.lists.members.create).toThrow(/(ID|body|category)/);
+      expect(CW.lists.members.edit).toThrow(/(ID|body|category)/);
+      expect(CW.lists.members.delete).toThrow(/(ID|body|category)/);
     });
 
     it('shoud create a meber', function(done) {
-      var testingMemberId;
-      MC.listsMembers(dummyListId, {
-        action: 'create',
-        body: {
-          status: 'subscribed',
-          email_address: 'imthebest@hotmail.com'
-        }
+      CW.lists.members.create(dummyListId, {
+        status: 'subscribed',
+        email_address: 'imthebest@hotmail.com'
       }).then((res) => {
         expect(res.email_address).toEqual('imthebest@hotmail.com');
         expect(res.status).toEqual('subscribed');
@@ -301,32 +314,26 @@ describe('List builder', function() {
     });
 
     it('shoud return all subscriber', (done) => {
-      MC.listsMembers(dummyListId).then((res) => {
+      CW.lists.members(dummyListId).then((res) => {
         expect(res.members).toExist();
         expect(res.members.length).toBe(1);
         expect(res).toExist();
-        testingMemberId = res.members[0].id;
+        created_member_id = res.members[0].id;
         done();
       }).catch( err => done( ResError( err ) ));
     });
 
     it('shoud return single member', (done) => {
-      MC.listsMembers(dummyListId,{
-        single_member_id: testingMemberId
-      }).then((res) => {
+      CW.lists.members(dummyListId, created_member_id ).then((res) => {
         expect(res).toExist();
-        expect(res.id).toBe(testingMemberId);
+        expect(res.id).toBe(created_member_id);
         done();
       }).catch( err => done( ResError( err ) ));
     });
 
     it('shoud edit single member', (done) => {
-      MC.listsMembers(dummyListId, {
-        action: 'edit',
-        single_member_id: testingMemberId,
-        body: {
-          status: 'pending'
-        }
+      CW.lists.members.edit(dummyListId, created_member_id, {
+        status: 'pending'
       }).then((res) => {
         expect(res).toExist();
         expect(res.status).toEqual('pending');
@@ -335,10 +342,7 @@ describe('List builder', function() {
     });
 
     it('shoud delete member', (done) => {
-      MC.listsMembers(dummyListId, {
-        action: 'delete',
-        single_member_id: testingMemberId
-      }).then((res) => {
+      CW.lists.members.delete(dummyListId, created_member_id).then((res) => {
         expect(res).toExist();
         expect(res.status).toBe(204);
         done();
@@ -350,25 +354,19 @@ describe('List builder', function() {
   //  SEGMENTS
   describe('Segments', () => {
     var segment_id;
-    it('should throw error if no id given', () => {
-      expect(MC.listsSegments).toThrow(/No list ID provided/);
+
+    it('shoud throw err if no ID given', () => {
+      expect(CW.lists.segments).toThrow(/(ID|body)/);
+      expect(CW.lists.segments.create).toThrow(/(ID|body|segment_id)/);
+      expect(CW.lists.segments.edit).toThrow(/(ID|body|segment_id)/);
+      expect(CW.lists.segments.delete).toThrow(/(ID|body|segment_id)/);
     });
 
-    it('shoud return segments lists', (done) => {
-      MC.listsSegments(dummyListId).then((res) => {
-        expect(res).toExist()
-        expect(res.segments).toBeA('array')
-        done();
-      }).catch( err => done( ResError( err ) ));
-    });
 
     it('shoud create a segment', (done) => {
-      MC.listsSegments(dummyListId, {
-        action: 'create',
-        body: {
-          name: 'segment',
-          static_segment: []
-        }
+      CW.lists.segments.create(dummyListId, {
+        name: 'segment',
+        static_segment: []
       }).then((res) => {
         expect(res).toExist()
         expect(res.name).toBe('segment');
@@ -377,13 +375,26 @@ describe('List builder', function() {
       }).catch( err => done( ResError( err ) ));
     });
 
+    it('shoud return segments lists', (done) => {
+      CW.lists.segments(dummyListId).then((res) => {
+        expect(res).toExist()
+        expect(res.segments).toBeA('array')
+        expect(res.segments.length).toBe(1);
+        done();
+      }).catch( err => done( ResError( err ) ));
+    });
+
+    it('shoud return 1 segments', (done) => {
+      CW.lists.segments(dummyListId, segment_id).then((res) => {
+        expect(res).toExist()
+        expect(res.id).toBe(segment_id);
+        done();
+      }).catch( err => done( ResError( err ) ));
+    });
+
     it('shoud edit single segment', (done) => {
-      MC.listsSegments(dummyListId, {
-        action: 'edit',
-        segment_id: segment_id,
-        body: {
-          name: 'segment_edit'
-        }
+      CW.lists.segments.edit(dummyListId, segment_id, {
+        name: 'segment_edit'
       }).then((res) => {
         expect(res).toExist();
         expect(res.name).toEqual('segment_edit');
@@ -392,10 +403,7 @@ describe('List builder', function() {
     });
 
     it('shoud delete segment', (done) => {
-      MC.listsSegments(dummyListId, {
-        action: 'delete',
-        segment_id: segment_id
-      }).then((res) => {
+      CW.lists.segments.delete(dummyListId, segment_id).then((res) => {
         expect(res).toExist();
         expect(res.status).toBe(204);
         done();
@@ -405,14 +413,15 @@ describe('List builder', function() {
   });
 
 
+
   // KEEP IT LAST TO CLEANUP
   describe('delete lists', () => {
     it('should throw error if no id given', () => {
-      expect(MC.listsDelete).toThrow(/No list ID provided/);
+      expect(CW.lists.delete).toThrow(/No list ID provided/);
     });
 
     it('should delete the list', (done) => {
-      MC.listsDelete(dummyListId).then((res) => {
+      CW.lists.delete(dummyListId).then((res) => {
         expect(res).toExist();
         expect(res.status).toEqual(204);
         expect(res.statusText).toBe('No Content');
@@ -421,5 +430,4 @@ describe('List builder', function() {
     });
 
   });
-
 }); //describe_main
