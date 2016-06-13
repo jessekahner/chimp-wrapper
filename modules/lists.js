@@ -79,7 +79,6 @@ module.exports = function (ChimpWrapper) {
   // --------------------------------------------------------------------------------
 
   lists.categories = function(list_id, category_id){
-    // options: { action: [create|edit|delete], body[object], category_id[string] }
     if(!list_id) {
       throw new Error('No list ID provided!');
       return;
