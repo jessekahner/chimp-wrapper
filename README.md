@@ -1,7 +1,7 @@
 [WIKI](https://github.com/Kirkhammetz/chimp-wrapper/wiki/)
 
-**__STATUS:__** Only plain and lists' query builder methods implemented, campaing and reports incoming.
-**__BREAKING_CHANGES** from 0.1 to 0.2
+**__STATUS:__** ADDED BASIC CAMPAIGN CRUDs
+
 
 ## Simple Promise based Mailchimp v3 wrapper
 *All methods return a Promise.*
