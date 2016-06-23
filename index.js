@@ -22,6 +22,7 @@ function ChimpWrapper (apiKey){
   this.delete = require('./modules/raw-calls')(that).delete;
 
   this.lists  = require('./modules/lists')(that);
+  this.campaigns  = require('./modules/campaigns')(that);
 
   return this;
 
