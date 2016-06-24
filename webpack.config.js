@@ -7,7 +7,7 @@ console.log();
 
 module.exports = {
   target: "web",
-  entry: __dirname + '/index.js',
+  entry: __dirname + '/browser.js',
 
   output: {
     path: __dirname,

@@ -1,9 +1,8 @@
-[WIKI](https://github.com/Kirkhammetz/chimp-wrapper/wiki/)
+**__STATUS:__**
+Added campaigns methods see [WIKI](https://github.com/Kirkhammetz/chimp-wrapper/wiki/)
 
-**__STATUS:__** ADDED BASIC CAMPAIGN CRUDs
 
-
-## Simple Promise based Mailchimp v3 wrapper
+## Simple Promise based Mailchimp v3 wrapper for Node.js
 *All methods return a Promise.*
 
     npm install --save chimp-wrapper
@@ -31,5 +30,9 @@ See [WIKI](https://github.com/Kirkhammetz/chimp-wrapper/wiki/Query-Builder-Metho
 there are tests suites in test/
 before testing rename .env-sample.json to .env.json and edit the API_KEY inside to match the one for you testing account.
 all the created element gets deleted after tests.
+Also TEST_MAIL for mail testing, and LIST_ID used in campaings testing where you can use your dummy list if you need to test.
 
     npm test
+
+##Client-side support
+Builded a version for client but seems like the new api doesn't accept apiKey calls, I'll give it a look in the future or make a separate repo for the client version with OAuth.
