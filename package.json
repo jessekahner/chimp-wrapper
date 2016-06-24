@@ -1,6 +1,6 @@
 {
   "name": "chimp-wrapper",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "repository": "https://github.com/Kirkhammetz/chimp-wrapper.git",
   "description": "Simple Promise based wrapper for MailChimp API v3",
   "main": "index.js",
