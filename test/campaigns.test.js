@@ -67,6 +67,6 @@ describe.only('Campigns builder', function() {
       expect(res.status).toEqual(204);
       expect(res.statusText).toEqual('No Content');
       done();
-    })
+    });
   });
 }); //describe_main

@@ -28,4 +28,5 @@ function ChimpWrapper (apiKey){
 
 }
 
+window.ChimpWrapper = ChimpWrapper;
 module.exports = exports = ChimpWrapper;
